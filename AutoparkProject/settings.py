@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'autopark',
+    'django.contrib.staticfiles',    
+    'drivers',
+    'users',
+    'employees',
 ]
 
 MIDDLEWARE = [
@@ -122,6 +124,9 @@ DATE_INPUT_FORMATS = ["%d-%m-%Y", "%d.%m.%Y"]
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+LOGIN_URL = "drivers:login"
+LOGIN_REDIRECT_URL = "drivers:index"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

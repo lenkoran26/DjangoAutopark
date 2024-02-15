@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{title}}</title>
+    </head>
+    
+    <body>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'drivers:login' %}"> Войти </a><br>
+            <a href="{% url 'drivers:register' %}"> Зарегистрироваться </a>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <p>Привет, {{user.driver.name}} {{user.driver.lastname}}</p>
+            <p><a href="{% url 'drivers:logout' %}"> Выйти </a></p>
+        {% endif %}
+
+        {% block menu %}
+        {% endblock menu%}
+
+        {% block content %}
+        {% endblock content %}
+
+    </body>
+</html>
