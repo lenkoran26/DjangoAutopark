@@ -1,12 +1,11 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-
+from django.http import JsonResponse
 from .forms import RegistrationForm, DriverForm
 from AutoparkProject.utils import calculate_age
 from AutoparkProject.settings import LOGIN_REDIRECT_URL
 from employees.models import Car
-
 
 
 def index(request):
@@ -28,12 +27,12 @@ def register(request):
             driver.save()
             # return redirect("driver_profile")
             return register_done(request, new_user=driver)
-    
+
     # для метода GET
     reg_form = RegistrationForm()
     driver_form = DriverForm()
     context = {"reg_form": reg_form, "driver_form": driver_form}
-    
+
     return render(request, "drivers/register.html", context=context)
 
 
@@ -46,17 +45,17 @@ def log_in(request):
     form = AuthenticationForm(request, data=request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
 
             user = authenticate(username=username, password=password)
 
             if user is not None:
                 login(request, user)
-                url = request.GET.get('next', LOGIN_REDIRECT_URL)
+                url = request.GET.get("next", LOGIN_REDIRECT_URL)
                 return redirect(url)
-    
-    return render(request, 'drivers/login.html', {'form': form, 'title': "Вход"})
+
+    return render(request, "drivers/login.html", {"form": form, "title": "Вход"})
 
 
 def log_out(request):
@@ -65,9 +64,21 @@ def log_out(request):
     return redirect(url)
 
 
-def select_car(request):
-    title = "Выберите машину"
-    cars = Car.objects.filter(status=True)
-    context = {"title": title, "cars": cars}
+def select_car(request, pk=None):
+    if request.method == "GET":
+        title = "Выберите машину"
+        cars = Car.objects.filter(status=True)
+        context = {"title": title, "cars": cars}
+    if pk is not None:
+        print(pk)
+        car = Car.objects.get(pk=pk)
+        car.status = False
+        car.save()
+        return redirect("drivers:index")
 
     return render(request, "drivers/select_car.html", context=context)
+
+
+def test_fetch(request):
+    car = request.POST.get("car")
+    return JsonResponse(car)

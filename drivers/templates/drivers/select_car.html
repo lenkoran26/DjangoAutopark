@@ -1,29 +1,47 @@
-{% extends "drivers/base.html" %}
-{% load static %}
-
-
-{% block content %}
+{% extends "drivers/base.html" %} 
+{% load static %} 
+{% block content %} 
 {% load thumbnail%}
-<link rel="stylesheet" href="{% static 'css/cars.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/cars.css' %}" type="text/css" />
+<script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script>
+  async function selectCar(carId) {
+    let car = {
+      id: carId,
+    };
+    const csrftoken = Cookies.get('csrftoken')
+    let response = await fetch("/drivers/test_fetch/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", 'X-CSRFToken': csrftoken },
+      body: JSON.stringify(car),
+      credentials: 'same-origin',
+    });
+    let result = await response.json();
+  }
+</script>
 
 <div class="cars">
-    {% for car in cars %}
-    <div class="car">
-        
-        {% if car.image %}
-            {% thumbnail car.image "300" as im %}
-                <img src="{{im.url}}">
-            {% endthumbnail %}
-        {% else %}
-            <img width="300" height="300" src="/static/img/noimage.jpg">
-        {% endif %}
+  {% for car in cars %}
+  <div class="car">
+    {% if car.image %} {% thumbnail car.image "300" as im %}
+    <img src="{{im.url}}" />
+    {% endthumbnail %} {% else %}
+    <img width="300" height="300" src="/static/img/noimage.jpg" />
+    {% endif %}
 
-       <h2>{{car.brand.name}} {{car.model}}</h2>
-       <p> Цвет - {{car.color}}</p>
-       <p> Год выпуска - {{car.year}}</p>
-       <p> Класс - {{car.category}}</p>
-    
-    {% endfor %}
+    <h2>{{car.brand.name}} {{car.model}}</h2>
+    <p>Цвет - {{car.color}}</p>
+    <p>Год выпуска - {{car.year}}</p>
+    <p>Класс - {{car.category}}</p>
+    <p>
+      <a href="{% url 'drivers:select_car' pk=car.id %}" class="btn btn-lg"
+        >Выбрать</a
+      >
+    </p>
+    <button onclick="selectCar('{{car.id}}')">Выбор JS</button>
+  </div>
 
- 
+  {% endfor %}
+</div>
+
 {% endblock content %}

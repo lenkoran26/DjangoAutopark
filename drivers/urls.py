@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import log_in, register, register_done, index, log_out, select_car
+from .views import log_in, register, register_done, index, log_out, select_car, test_fetch
 
 
 app_name = "drivers"
@@ -13,4 +13,7 @@ urlpatterns = [
 
     # path('profile/', profile, name="profile"),
     path("select-car/", select_car, name="select_car"),
+    path("select-car/<int:pk>/", select_car, name="select_car"),
+
+    path("test_fetch/", test_fetch, name="test_fetch"),
 ]
