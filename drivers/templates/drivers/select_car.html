@@ -3,16 +3,17 @@
 {% block content %} 
 {% load thumbnail%}
 <link rel="stylesheet" href="{% static 'css/cars.css' %}" type="text/css" />
-<script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<!--<script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>-->
 <script>
+
   async function selectCar(carId) {
     let car = {
       id: carId,
     };
-    const csrftoken = Cookies.get('csrftoken')
+
     let response = await fetch("/drivers/test_fetch/", {
       method: "POST",
-      headers: { "Content-Type": "application/json", 'X-CSRFToken': csrftoken },
+      headers: { "Content-Type": "application/json", 'X-CSRFToken': '{% csrf_token %}' },
       body: JSON.stringify(car),
       credentials: 'same-origin',
     });
