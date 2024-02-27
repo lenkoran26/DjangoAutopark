@@ -18,8 +18,13 @@
       credentials: 'same-origin',
     });
     let result = await response.json();
+    console.log(result)
   }
 </script>
+
+<div class="car-count">
+  Количество доступных машин: <span>{{count}}</span>
+</div>
 
 <div class="cars">
   {% for car in cars %}

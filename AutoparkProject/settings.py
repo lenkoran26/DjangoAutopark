@@ -134,4 +134,4 @@ LOGIN_REDIRECT_URL = "drivers:index"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True

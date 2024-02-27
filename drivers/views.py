@@ -1,14 +1,17 @@
 import json
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .forms import RegistrationForm, DriverForm
 from AutoparkProject.utils import calculate_age
 from AutoparkProject.settings import LOGIN_REDIRECT_URL
+
 from employees.models import Car
-from django.views.decorators.csrf import csrf_exempt
+from drivers.models import CarDriver, Driver
+
 
 
 def index(request):
@@ -71,12 +74,15 @@ def select_car(request, pk=None):
     if request.method == "GET":
         title = "Выберите машину"
         cars = Car.objects.filter(status=True)
-        context = {"title": title, "cars": cars}
+        car_count = Car.objects.filter(status=True).count()
+        context = {"title": title, "cars": cars, "count": car_count}
     if pk is not None:
-        print(pk)
         car = Car.objects.get(pk=pk)
         car.status = False
         car.save()
+
+        driver = Driver.objects.get(user=request.user)
+        CarDriver.objects.create(car=car, driver=driver)
         return redirect("drivers:index")
 
     return render(request, "drivers/select_car.html", context=context)
@@ -88,3 +94,17 @@ def test_fetch(request):
         car_id = json_data.get('id')
 
         return JsonResponse({'car_id': car_id})
+
+
+def profile(request, pk):
+    driver = get_object_or_404(Driver, pk=pk)
+    car_driver = CarDriver.objects.filter(driver=driver).first()
+
+    if car_driver is not None:
+        car = car_driver.car
+    else:
+        car = None
+
+
+    context = {'driver': driver, 'car': car}
+    return render(request, 'drivers/profile.html', context=context)
