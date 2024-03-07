@@ -21,6 +21,18 @@ class Driver(models.Model):
         return " ".join([self.name, self.lastname])
 
 class CarDriver(models.Model):
-    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, verbose_name='Водитель')
-    car = models.ForeignKey(Car, on_delete=models.SET_NULL, null=True)
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, unique=True, verbose_name='Водитель')
+    car = models.ForeignKey(Car, on_delete=models.SET_NULL, null=True, unique=True)
+
+
+    def get_driver_name(self):
+        return " ".join([self.driver.name, self.driver.lastname])
+
+
+    def get_car_name(self):
+        return " ".join([self.car.brand.name, self.car.model])
+
+
+    def __str__(self):
+        return " :: ".join([self.get_driver_name(), self.get_car_name()])
 

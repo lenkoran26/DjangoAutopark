@@ -1,6 +1,9 @@
 {% extends "drivers/base.html" %} {% block menu %}
 <h1>Главная страница</h1>
-<p><a href="{% url 'drivers:profile' pk=request.user.id %}">Мой профиль</a></p>
+{% if user.is_authenticated %}
+    <p><a href="{% url 'drivers:profile' pk=request.user.id %}">Мой профиль</a></p>
+{% endif %}
+
 <p><a href="#">Мои заказы</a></p>
 <p><a href="{% url 'drivers:select_car' %}">Выбрать машину</a></p>
 {% endblock menu %}

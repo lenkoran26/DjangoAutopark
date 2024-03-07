@@ -14,7 +14,7 @@ from employees.models import Car
 from drivers.models import CarDriver, Driver
 
 
-
+@login_required
 def index(request):
     title = "Главная страница"
     context = {"title": title}
@@ -98,9 +98,24 @@ def select_car(request):
         new_car = Car.objects.get(pk=car_id)
 
         driver = Driver.objects.get(user=request.user)
+        # если в таблице связи водитель-машина есть связь
         if driver.cardriver_set.first() is not None:
             if driver.cardriver_set.first().car is not None:
-                pass
+                current_car_id = driver.cardriver_set.first().car.id
+                current_car = Car.objects.get(pk=current_car_id)
+                current_car.status=True
+                current_car.save()
+
+            driver.cardriver_set.update(car=new_car)
+        else:
+            CarDriver.objects.create(driver=driver, car=new_car)
+
+        new_car.status = False
+        new_car.save()
+
+        return redirect(to="drivers:profile", pk=request.user.pk)
+
+
 
 
 
@@ -144,15 +159,14 @@ def refuse_car(request):
 
     if request.method == "POST":
         if 'refuse' in request.POST:
-            """
-            получаем водителя
-            получаем машину водителя
-            статус машины -> car.status=True
-            cardriver(driver=driver).car=null
-            """
+
             driver = Driver.objects.get(user=request.user)
-            driver.cardriver_set.first().car.status = False
+            car_id = driver.cardriver_set.first().car.id
+            car = Car.objects.get(pk=car_id)
+            car.status = True
+            car.save()
+
             driver.cardriver_set.first().delete()
-            return redirect("drivers:profile")
+            return redirect(to="drivers:profile", pk=request.user.pk)
         else:
-            return redirect("drivers:profile")
+            return redirect(to="drivers:profile", pk=request.user.pk)

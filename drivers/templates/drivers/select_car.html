@@ -29,10 +29,12 @@
 <div class="cars">
   {% for car in cars %}
   <div class="car">
-    {% if car.image %} {% thumbnail car.image "300" as im %}
-    <img src="{{im.url}}" />
-    {% endthumbnail %} {% else %}
-    <img width="300" height="300" src="/static/img/noimage.jpg" />
+    {% if car.image %}
+      {% thumbnail car.image "300" as im %}
+        <img src="{{im.url}}" />
+      {% endthumbnail %}
+    {% else %}
+      <img width="300" height="300" src="/static/img/noimage.jpg" />
     {% endif %}
 
     <h2>{{car.brand.name}} {{car.model}}</h2>
