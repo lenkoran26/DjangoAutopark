@@ -1,0 +1,10 @@
+{% extends 'drivers/base.html' %}
+{% load static %}
+{% block content %}
+{% load thumbnail%}
+
+<h2>Имя - {{client.name}}</h2>
+<h2>Фамилия - {{client.lastname}}</h2>
+<h2>Дата рождения - {{client.birthday}}</h2>
+
+{% endblock content %}
