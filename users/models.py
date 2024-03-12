@@ -15,3 +15,4 @@ class Client(models.Model):
 
     def __str__(self):
         return " ".join([self.name, self.lastname])
+

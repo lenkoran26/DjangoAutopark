@@ -1,5 +1,7 @@
 {% extends 'drivers/base.html' %}
+{% load static %}
 {% block content %}
+{% load thumbnail%}
 
 <h2>Имя - {{driver.name}}</h2>
 <h2>Фамилия - {{driver.lastname}}</h2>
@@ -11,7 +13,16 @@
 {% endif %}
 <hr>
 {% if driver.cardriver_set.first.car %}
+
     <h2>Ваша машина:</h2>
+    {% if car.image %}
+      {% thumbnail car.image "300" as im %}
+        <img src="{{im.url}}" />
+      {% endthumbnail %}
+    {% else %}
+      <img width="300" height="300" src="/static/img/noimage.jpg" />
+    {% endif %}
+
     <h3>{{car.brand.name}} {{car.model}} {{car.year}} года</h3>
 
     <form method="get" action="{% url 'drivers:select_car' %}">
