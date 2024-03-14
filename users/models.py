@@ -1,7 +1,9 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
 class Client(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30, verbose_name="Имя")
     lastname = models.CharField(max_length=30, verbose_name="Фамилия")
     birthday = models.DateField(verbose_name="Дата рождения")
@@ -15,4 +17,6 @@ class Client(models.Model):
 
     def __str__(self):
         return " ".join([self.name, self.lastname])
+
+
 

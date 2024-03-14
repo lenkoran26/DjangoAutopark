@@ -1,10 +1,12 @@
-{% extends 'drivers/base.html' %}
+{% extends 'users/base.html' %}
 {% load static %}
 {% block content %}
 {% load thumbnail%}
 
-<h2>Имя - {{client.name}}</h2>
-<h2>Фамилия - {{client.lastname}}</h2>
-<h2>Дата рождения - {{client.birthday}}</h2>
+<div style="padding-top: 40px">
+<h3>Имя - {{client.name}}</h3>
+<h3>Фамилия - {{client.lastname}}</h3>
+<h3>Дата рождения - {{client.birthday|date:'d.m.Y'}}</h3>
+</div>
 
 {% endblock content %}

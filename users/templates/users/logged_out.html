@@ -1,0 +1,13 @@
+{% extends 'users/base.html' %}
+{% block content %}
+
+<div style="padding-left: 40%">
+<h2>Покинуть сайт?</h2>
+<form method="post">
+  {% csrf_token %}
+  <button name="logout" type="submit" class="btn btn-lg btn-primary" >Выйти</button>
+  <button name="cancel" type="submit" class="btn btn-secondary btn-lg" >Остаться</button>
+</form>
+</div>
+
+{% endblock content %}

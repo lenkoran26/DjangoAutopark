@@ -1,11 +1,12 @@
+from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from .forms import RegistrationForm, ClientForm, LoginUserForm
 from AutoparkProject.utils import calculate_age
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import AuthenticationForm
-from django.views.generic import DetailView
+from django.views.generic import DetailView, TemplateView
 from .models import Client
 
 def index(request):
@@ -52,3 +53,32 @@ class ProfileView(DetailView):
     model = Client
     template_name = 'users/profile.html'
     context_object_name = 'client'
+
+
+class LogoutUser(TemplateView):
+    template_name = "users/logged_out.html"
+
+    def post(self, request, *args, **kwargs):
+        if 'logout' in request.POST:
+            logout(request)
+            url = "users:index"
+            return redirect(url)
+        else:
+            url = request.GET.get('next', 'users:index')
+            return redirect(url)
+
+    def get_context_data(self, **kwargs):
+        pass
+        return super().get_context_data()
+
+# class LogoutUser():
+#     template_name = "users/logged_out.html"
+#
+#     def post(self, request, *args, **kwargs):
+#         if 'logout' in request.POST:
+#             super().post(self, request, *args, **kwargs)
+#         else:
+#             url = request.GET.get('next', 'users:index')
+#             return redirect(url)
+
+
